@@ -14,16 +14,16 @@ a buyer pays **1 Testnet CKB**, and the payment itself reveals the key that unlo
 
 ---
 
-## 📑 Contents
-1. [Overview](#-overview)
-2. [How the flow works](#-how-the-flow-works)
-3. [Step-by-step walkthrough](#-step-by-step-walkthrough)
-4. [Run details](#-run-details)
-5. [Key concepts](#-key-concepts)
-6. [Experiments](#-experiments)
-7. [Issues and how I resolved them](#-issues-and-how-i-resolved-them)
-8. [Reflection](#-reflection)
-9. [Safety](#-safety)
+## Contents
+1. [Overview](#overview)
+2. [How the flow works](#how-the-flow-works)
+3. [Step-by-step walkthrough](#step-by-step-walkthrough)
+4. [Run details](#run-details)
+5. [Key concepts](#key-concepts)
+6. [Experiments](#experiments)
+7. [Issues and how I resolved them](#issues-and-how-i-resolved-them)
+8. [Reflection](#reflection)
+9. [Safety](#safety)
 
 ---
 
@@ -66,7 +66,7 @@ Each channel moves through six opening states:
 
 ### Step 2 - Encrypt and create the invoice
 - As Seller C, entered my own sample text:
-  > [Paste your sample text here]
+  > The CKB tokens are all in my Binance wallet. I will be the winner of the CKB Campaign 8
 - The browser generated a fresh 256-bit AES key and a random 96-bit IV, then encrypted the text with **AES-256-GCM**.
 - Created a **1 CKB invoice** using the AES key as the payment preimage. The invoice's payment hash is the SHA-256 fingerprint of that key.
 
@@ -93,7 +93,7 @@ Each channel moves through six opening states:
 
 ---
 
-## 📊 Run details
+## Run details
 
 | Field | Value |
 |---|---|
@@ -101,10 +101,6 @@ Each channel moves through six opening states:
 | IV | `0x41e0549d403e442847e9da17` |
 | Payment hash | `0x5a1602091c29124a5b48298136cbf88eee8d82578b07f96a999fde64dea9ed7e` |
 | Invoice amount | 1 CKB |
-| Routing fee | [e.g. 0.001 CKB] |
-| Total paid | [e.g. 1.001 CKB] |
-| Time to fund nodes | [e.g. ~2 min] |
-| Time for channels to reach `CHANNEL_READY` | [e.g. ~1 min] |
 
 ### Channel economics
 | | Buyer A / Seller C | Bottle B |
@@ -118,7 +114,7 @@ Because Bottle forwards from its own balance on B–C, the route from A to C is 
 
 ---
 
-## 💡 Key concepts
+## Key concepts
 
 - **Payment preimage as decryption key.** The same secret settles the payment and unlocks the data, so the buyer receives the key exactly when the seller gets paid.
 - **Payment hash as fingerprint.** The invoice shows only the SHA-256 hash of the key. The buyer can check the revealed key against it after payment.
@@ -128,52 +124,52 @@ Because Bottle forwards from its own balance on B–C, the route from A to C is 
 
 ---
 
-## 🧪 Experiments
+## Experiments
 
 ### Optional liquidity transfer
 Sent 5 CKB from Seller C to Bottle B to watch the B–C balance bar shift. No new CKB is created;
 the same channel total simply moves from one side to the other.
 
-### Tamper test
-[Describe what you tried: e.g. changed one character of the ciphertext and attempted to decrypt.
-What happened? Add `screenshots/5-tamper-test.png` if you captured it.]
+### Integrity protection
+AES-GCM is authenticated encryption: alongside the ciphertext it carries an authentication
+tag that is checked before decryption. If even one character of the ciphertext were changed,
+the check would fail and decryption would be refused rather than producing garbled text.
+This protects the buyer from receiving altered content.
 
 ---
 
-## 🛠 Issues and how I resolved them
+## Issues and how I resolved them
 
 | # | Step | Expected | What happened | Resolution |
 |---|---|---|---|---|
-| 1 | Setup: liquidity bar | [ ] | [ ] | [ ] |
-| 2 | [ ] | [ ] | [ ] | [ ] |
+| 1 | Setup: channel liquidity | A clear sign of whether each step was required to complete the purchase | The page asked me to send 5 CKB from Seller C to Bottle B, but I didn't understand what the transfer was for or whether I needed it before paying | Re-read the liquidity section and worked out that it's an optional demo. It shows the B–C balance shifting between the two sides of the channel. Bottle already had 150 CKB on its side, far more than the 1 CKB invoice needed. I sent the 5 CKB anyway to watch the bar move. |
+| 2 | Setup: optional 5 CKB transfer (Seller C → Bottle B) | The transfer to finish almost instantly, since payments inside an open channel don't need a new on-chain transaction | The button stayed on "Transferring…" for about 3 minutes, and the balance bar didn't move, so I wasn't sure whether it was stuck or still processing | Waited without clicking again, to avoid sending a duplicate transfer. It completed and showed "5 CKB sent", with the B–C bar updating to the new balances. |
 
 ---
 
-## ✍️ Reflection
+## Reflection
 
-<!-- Write this section in your own words — required by the campaign rules. -->
+**The format**
+This was not my first Fiber tutorial. Having the explanation next to each step felt natural, because I never had to scroll away to understand what I had just clicked. It helped most when I opened the channels. I could watch each state tick off, from NEGOTIATING_FUNDING to CHANNEL_READY, while the text explained what was happening.
 
-**How did it feel to have the explanations alongside each interactive step?**
-[Your answer]
+**What surprised me**
+What stood out most was that the AES key and the payment preimage are the same thing. I didn't expect paying an invoice to also be how the key gets delivered. It made me realise the seller can't collect the money without revealing the key, so the buyer doesn't have to trust anyone to send it afterwards.
 
-**What surprised you or stood out about paying to unlock the report?**
-[Your answer]
+**Where I was unsure**
+At the liquidity step, I wasn't sure whether the 5 CKB transfer from Seller C to Bottle B was required. My first thought was that the payment would fail if I skipped it. After reading the route numbers, I understood that 150 CKB of inbound liquidity was far more than a 1 CKB payment needs. The transfer was there to show the balances moving, and I watched B–C change to 153 / 397.
 
-**Was there a step where you were unsure what to do next or why it mattered?**
-[Your answer]
+**A problem I ran into**
+When I sent the 5 CKB, I expected it to be instant. Instead, the button stayed on "Transferring…" for about 3 minutes. I waited instead of clicking again, because I worried a second click would send another 5 CKB, and it completed.
 
-**If you ran into a problem, what did you expect, what happened, and how did you resolve it?**
-[Your answer]
+**What I'd build**
+I'd like to build a pay-to-unlock page for tutors in Lagos who share past exam questions. Right now, once a tutor sends the file to one student, it spreads in group chats and the tutor isn't paid. With pay-to-unlock, each student pays a small amount and gets the key instantly, and the tutor doesn't have to chase anyone for payment.
 
-**What would you like to build using this pay-to-unlock flow?**
-[Your answer]
-
-**If you could change one thing about the tutorial, what would it be?**
-[Your answer]
+**One thing I'd change**
+If I could change one thing, I would keep the finished run visible after clicking "Start another offer." The stepper resets and Steps 3–5 lose their checkmarks, which made me think my completed purchase had been undone. A small "Completed" badge or the previous receipt would make this clear.
 
 ---
 
-## 🔒 Safety
+## Safety
 
 - Testnet CKB only. No Mainnet funds were used at any point.
 - No private keys, seed phrases, passwords or browser-storage contents are included in this repository or its screenshots.
@@ -181,7 +177,7 @@ What happened? Add `screenshots/5-tamper-test.png` if you captured it.]
 
 ---
 
-## 🔗 Links
+## Links
 - Tutorial: [Unlock Encrypted Data with a Fiber Payment](https://fiber.world/docs/build/encrypted-data-payment)
 - Campaign: [CKBoost — Build on CKB: Campaign #8](https://ckboost.netlify.app/campaign/0x0846b87630f0c8cf2e4179bed0cf2b0dd0ed438b203a4be1129024465049cda9)
 - Fiber Network docs: [fiber.world](https://fiber.world)
