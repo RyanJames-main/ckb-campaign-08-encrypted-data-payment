@@ -42,12 +42,6 @@ The tutorial runs three parties:
 Browser nodes can start connections but cannot accept them, so Buyer A and Seller C each open a
 channel with Bottle B, which routes the payment between them.
 
-```mermaid
-graph LR
-    A["🛒 Buyer A<br/>(browser node)"] <-->|"Channel A–B"| B(("🍾 Bottle B<br/>(public node)"))
-    B <-->|"Channel B–C"| C["📄 Seller C<br/>(browser node)"]
-```
-
 ---
 
 ## ⚙️ How the flow works
@@ -55,24 +49,6 @@ graph LR
 The core idea: **the AES decryption key is also the invoice's payment preimage.**
 Seller C cannot collect the payment without revealing that secret, so paying and unlocking
 happen in the same moment, with no backend and no trusted middleman.
-
-```mermaid
-sequenceDiagram
-    participant C as Seller C
-    participant B as Bottle B
-    participant A as Buyer A
-    C->>C: Generate 256-bit AES key + 96-bit IV
-    C->>C: Encrypt report with AES-256-GCM
-    C->>C: Create 1 CKB invoice (preimage = AES key)
-    C->>A: Send offer JSON (ciphertext, iv, invoice, paymentHash, lastHop)
-    A->>A: Decrypt without key → ❌ rejected
-    A->>A: Validate invoice (network, amount, payment hash)
-    A->>B: Pay 1 CKB + routing fee
-    B->>C: Forward 1 CKB
-    C-->>B: Reveal preimage to claim payment
-    B-->>A: Preimage returned to buyer
-    A->>A: Decrypt with preimage → ✅ original report
-```
 
 ---
 
