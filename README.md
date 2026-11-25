@@ -1,4 +1,4 @@
-# Unlock Encrypted Data with a Fiber Payment — Basic Quest
+# Unlock Encrypted Data with a Fiber Payment: Basic Quest
 
 **CKBoost · Build on CKB: Campaign #8 · Quest 1 (Basic)**
 
@@ -179,5 +179,5 @@ If I could change one thing, I would keep the finished run visible after clickin
 
 ## Links
 - Tutorial: [Unlock Encrypted Data with a Fiber Payment](https://fiber.world/docs/build/encrypted-data-payment)
-- Campaign: [CKBoost — Build on CKB: Campaign #8](https://ckboost.netlify.app/campaign/0x0846b87630f0c8cf2e4179bed0cf2b0dd0ed438b203a4be1129024465049cda9)
+- Campaign: [CKBoost: Build on CKB Campaign #8](https://ckboost.netlify.app/campaign/0x0846b87630f0c8cf2e4179bed0cf2b0dd0ed438b203a4be1129024465049cda9)
 - Fiber Network docs: [fiber.world](https://fiber.world)
