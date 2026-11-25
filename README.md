@@ -1,4 +1,4 @@
-# 🔐 Unlock Encrypted Data with a Fiber Payment — Basic Quest
+# Unlock Encrypted Data with a Fiber Payment — Basic Quest
 
 **CKBoost · Build on CKB: Campaign #8 · Quest 1 (Basic)**
 
@@ -27,7 +27,7 @@ a buyer pays **1 Testnet CKB**, and the payment itself reveals the key that unlo
 
 ---
 
-## 🧭 Overview
+## Overview
 
 The tutorial runs three parties:
 
@@ -42,7 +42,7 @@ channel with Bottle B, which routes the payment between them.
 
 ---
 
-## ⚙️ How the flow works
+## How the flow works
 
 The core idea: **the AES decryption key is also the invoice's payment preimage.**
 Seller C cannot collect the payment without revealing that secret, so paying and unlocking
@@ -50,7 +50,7 @@ happen in the same moment, with no backend and no trusted middleman.
 
 ---
 
-## 🪜 Step-by-step walkthrough
+## Step-by-step walkthrough
 
 ### Step 1 - Setup: start nodes and open channels
 - Started **Buyer A** and **Seller C** in the browser (Fiber WASM runtime, IndexedDB storage, WSS transport).
