@@ -11,8 +11,6 @@ a buyer pays **1 Testnet CKB**, and the payment itself reveals the key that unlo
 | **Tutorial** | [Unlock Encrypted Data with a Fiber Payment](https://fiber.world/docs/build/encrypted-data-payment) |
 | **Fiber version** | v0.10.1 |
 | **Network** | CKB Testnet only |
-| **Completed by** | [Your name / handle] |
-| **Date** | [November 25, 2026] |
 
 ---
 
@@ -54,7 +52,7 @@ happen in the same moment, with no backend and no trusted middleman.
 
 ## 🪜 Step-by-step walkthrough
 
-### Step 1 — Setup: start nodes and open channels
+### Step 1 - Setup: start nodes and open channels
 - Started **Buyer A** and **Seller C** in the browser (Fiber WASM runtime, IndexedDB storage, WSS transport).
 - Funded each node's own Testnet address from the CKB Testnet Faucet.
 - Opened a channel from each node to **Bottle B** and waited for both to reach `CHANNEL_READY`.
@@ -66,27 +64,27 @@ Each channel moves through six opening states:
 ![Both channels at CHANNEL_READY](<screenshots/Screenshot (373).png>)
 *Both channels A–B and C–B showing `CHANNEL_READY`.*
 
-### Step 2 — Encrypt and create the invoice
+### Step 2 - Encrypt and create the invoice
 - As Seller C, entered my own sample text:
   > [Paste your sample text here]
 - The browser generated a fresh 256-bit AES key and a random 96-bit IV, then encrypted the text with **AES-256-GCM**.
 - Created a **1 CKB invoice** using the AES key as the payment preimage. The invoice's payment hash is the SHA-256 fingerprint of that key.
 
-### Step 3 — Transfer the offer and try to decrypt without the key
+### Step 3 - Transfer the offer and try to decrypt without the key
 - The encrypted offer was delivered to Buyer A as JSON containing `cipher`, `ciphertext`, `iv`, `invoice`, `paymentHash` and `lastHop`.
 - Selected **Decrypt without key**. AES-GCM rejected the attempt: the buyer has the ciphertext and IV, but not Seller C's original key.
 
 ![Encrypted offer and decryption rejected](<screenshots/Screenshot (392).png>)
 *The encrypted offer on the buyer side and the "Decryption rejected" message.*
 
-### Step 4 — Pay the invoice
+### Step 4 - Pay the invoice
 - Before sending funds, Buyer A automatically checked the invoice's **network, amount and payment hash** against the offer.
 - Paid 1 Testnet CKB through Bottle B.
 
 ![Payment receipt](<screenshots/Screenshot (395).png>)
 *Completed payment: 1 CKB received by Seller C, with the payment hash.*
 
-### Step 5 — Decrypt the report
+### Step 5 - Decrypt the report
 - Seller C revealed the preimage to claim the payment, and Fiber returned it to Buyer A.
 - Selected **Decrypt result**: the preimage worked as the AES key and revealed the original text.
 
